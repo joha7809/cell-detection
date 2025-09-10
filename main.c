@@ -55,19 +55,47 @@ void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH], unsigned char o
 int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH], unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]){
   
   int change = 0;
-  // Se om dette kan fikses
-  for (int x = 1; x < BMP_WIDTH-1; x++) {
-    for (int y = 1; y < BMP_HEIGTH-1; y++) { 
 
+  // Se om dette kan fikses
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) { 
+      
+      change = 0;
+      
       if (input_image[x][y] == 255) {
-  
-        if (input_image[x-1][y] == 0  || input_image[x][y-1] == 0 || input_image[x][y+1] == 0 || input_image[x+1][y] == 0) {
+        
+        if (x != 0) {
+          if (input_image[x-1][y] == 0) {
+            change = 1;
+          }
+        }
+        
+        if (x != BMP_WIDTH) {
+          if (input_image[x+1][y] == 0) {
+            change = 1;
+          }
+        }
+
+        if (y != 0) {
+          if (input_image[x][y-1] == 0) {
+            change = 1;
+          }
+        }
+        
+        if (y != BMP_HEIGTH) {
+          if (input_image[x][y+1] == 0) {
+            change = 1;
+          }
+        }
+
+        if (change) {
           output_image[x][y] = 0;
-          change = 1;
         } else {
           output_image[x][y] = 255;
         }
+
       }
+
     }
   }
   return change;
@@ -107,7 +135,7 @@ int main(int argc, char** argv)
   for (int x = 0; x < BMP_WIDTH; x++)
   {
     for (int y = 0; y < BMP_HEIGTH; y++)
-    {
+    { 
       
       for (int c = 0; c < BMP_CHANNELS; c++){
         output_image[x][y][c] = temp_image[x][y];
