@@ -64,36 +64,39 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
   // Se om dette kan fikses
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) { 
-      
-      change = 0;
-      
+
       if (input_image[x][y] == 255) {
         
+        int locChange = 0;
         if (x != 0) {
           if (input_image[x-1][y] == 0) {
             change = 1;
+            locChange = 1;
           }
         }
         
         if (x != BMP_WIDTH) {
           if (input_image[x+1][y] == 0) {
             change = 1;
+            locChange = 1;
           }
         }
 
         if (y != 0) {
           if (input_image[x][y-1] == 0) {
             change = 1;
+            locChange = 1;
           }
         }
         
         if (y != BMP_HEIGTH) {
           if (input_image[x][y+1] == 0) {
             change = 1;
+            locChange = 1;
           }
         }
 
-        if (change) {
+        if (locChange) {
           output_image[x][y] = 0;
         } else {
           output_image[x][y] = 255;
@@ -181,7 +184,7 @@ int main(int argc, char **argv) {
     }
   }
 
-  write_bitmap(output_image, argv[2] + (12-temp));
+  write_bitmap(output_image, argv[2] + 2);
 
 
 
