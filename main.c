@@ -33,7 +33,8 @@ void grayscale(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], u
     {
       
       int gray = (input_image[x][y][0] + input_image[x][y][1] + input_image[x][y][2]) / 3;
-
+      
+      // se på om man kan optimere c ved at gøre det fra array til en integer
       for (int c = 0; c < BMP_CHANNELS; c++){
         output_image[x][y][c] = gray;
       }
@@ -69,6 +70,20 @@ void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], u
     }
   }
 }
+
+
+
+void erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]){
+  
+  
+  
+  for (int x = 1; x < BMP_WIDTH-1; x++) {
+    for (int y = 1; y < BMP_HEIGTH-1; y++) { 
+      
+    }
+  }
+}
+
 
 //Main function
 int main(int argc, char** argv)
