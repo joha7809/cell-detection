@@ -75,7 +75,7 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
           }
         }
         
-        if (x != BMP_WIDTH) {
+        if (x != BMP_WIDTH-1) {
           if (input_image[x+1][y] == 0) {
             change = 1;
             locChange = 1;
@@ -89,7 +89,7 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
           }
         }
         
-        if (y != BMP_HEIGTH) {
+        if (y != BMP_HEIGTH-1) {
           if (input_image[x][y+1] == 0) {
             change = 1;
             locChange = 1;
@@ -107,6 +107,58 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
     }
   }
   return change;
+}
+
+
+int cellCounter (unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]){
+  
+  int cells = 0;
+  int dy0, dy1, dx0, dy1, size = 6;
+
+
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) { 
+      
+
+      if (input_image[x][y] == 255) {
+          
+        int l,r,u,d = 6;
+
+        if (x < l) {l = x;}
+        if ((BMP_WIDTH-1)-x < r) {r = (BMP_WIDTH-1)-x;}
+        if (y < u) {u = y;}
+        if ((BMP_HEIGTH-1)-y < r) {r = (BMP_HEIGTH-1)-y;}
+        
+
+        
+        if (x != 0) {
+          if (input_image[x-1][y] == 0) {
+          }
+        }
+        
+        if (x != BMP_WIDTH-1) {
+          if (input_image[x+1][y] == 0) {
+          }
+        }
+
+        if (y != 0) {
+          if (input_image[x][y-1] == 0) {
+          }
+        }
+        
+        if (y != BMP_HEIGTH-1) {
+          if (input_image[x][y+1] == 0) {
+          }
+        }
+
+       
+
+      }
+
+    }
+  }
+
+  return cells;
 }
 
 // Main function
@@ -162,7 +214,7 @@ int main(int argc, char **argv) {
   write_bitmap(output_image, argv[2] + 1);
 
 
-  int temp = 10;
+  int temp = 20;
   while (temp) {
     erode(temp_image, temp_image2);
     
@@ -173,7 +225,22 @@ int main(int argc, char **argv) {
     }
 
     temp--;
+
+    for (int x = 0; x < BMP_WIDTH; x++) {
+      for (int y = 0; y < BMP_HEIGTH; y++) {
+
+        for (int c = 0; c < BMP_CHANNELS; c++) {
+          output_image[x][y][c] = temp_image2[x][y];
+        }
+      }
+    }
+
+   char filename[64];   // stack buffer
+snprintf(filename, sizeof(filename), "erode%d.bmp", 22 - temp);  // no /
+write_bitmap(output_image, filename);
+
   }
+
 
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
