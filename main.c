@@ -157,6 +157,36 @@ int main(int argc, char **argv) {
   }
 
   write_bitmap(output_image, argv[2] + 1);
+
+
+  int temp = 10;
+  while (temp) {
+    erode(temp_image, temp_image2);
+    
+    for (int x = 0; x < BMP_WIDTH; x++) {
+      for (int y = 0; y < BMP_HEIGTH; y++) {  
+        temp_image[x][y] = temp_image2[x][y];
+      }
+    }
+
+    temp--;
+  }
+
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+
+      for (int c = 0; c < BMP_CHANNELS; c++) {
+        output_image[x][y][c] = temp_image2[x][y];
+      }
+    }
+  }
+
+  write_bitmap(output_image, argv[2] + (12-temp));
+
+
+
+
+  /*
   unsigned char (*input)[BMP_HEIGTH] = temp_image;
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
 
@@ -184,6 +214,8 @@ int main(int argc, char **argv) {
   }
 
   write_bitmap(output_image, argv[2] + 2);
+  */
+
 
   printf("Done!\n");
   return 0;
