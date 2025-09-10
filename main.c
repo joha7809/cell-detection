@@ -56,6 +56,20 @@ void grayscale2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], 
   }
 }
 
+void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]){
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {      
+      for (int c = 0; c < BMP_CHANNELS; c++) {
+        if (input_image[x][y][0] <= 90) {
+          output_image[x][y][c] = 0;
+        } else {
+          output_image[x][y][c] = 255;
+        }
+      }
+    }
+  }
+}
+
 //Main function
 int main(int argc, char** argv)
 {
@@ -78,6 +92,8 @@ int main(int argc, char** argv)
 
   //Run inversion
   grayscale(input_image,output_image);
+
+  threshold(output_image, output_image);
 
   //Save image to file
   write_bitmap(output_image, argv[2]);
