@@ -19,7 +19,7 @@ void grayscale(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS], u
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
       int gray = (input_image[x][y][0] + input_image[x][y][1] + input_image[x][y][2]) / 3;
-      // se på om man kan optimere c ved at gøre det fra array til en integer
+      
       output_image[x][y] = gray;
     }
   }
@@ -70,8 +70,6 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH], unsigned char output
       }
     }
   }
-  
-  input_image = output_image;
   return change;
 }
 
@@ -110,7 +108,7 @@ int main(int argc, char** argv)
   {
     for (int y = 0; y < BMP_HEIGTH; y++)
     {
-      // se på om man kan optimere c ved at gøre det fra array til en integer
+      
       for (int c = 0; c < BMP_CHANNELS; c++){
         output_image[x][y][c] = temp_image[x][y];
       }
@@ -124,7 +122,7 @@ int main(int argc, char** argv)
   {
     for (int y = 0; y < BMP_HEIGTH; y++)
     {
-      // se på om man kan optimere c ved at gøre det fra array til en integer
+      
       for (int c = 0; c < BMP_CHANNELS; c++){
         output_image[x][y][c] = temp_image2[x][y];
       }
@@ -136,6 +134,17 @@ int main(int argc, char** argv)
   int temp = 10;
   while(temp) {
     erode(temp_image2, temp_image);
+    for (int x = 0; x < BMP_WIDTH; x++)
+    {
+      for (int y = 0; y < BMP_HEIGTH; y++)
+      {
+        
+        for (int c = 0; c < BMP_CHANNELS; c++){
+          temp_image2[x][y] = temp_image[x][y];
+        }
+      }
+    }
+
     temp--;
   }
 
@@ -144,7 +153,7 @@ int main(int argc, char** argv)
   {
     for (int y = 0; y < BMP_HEIGTH; y++)
     {
-      // se på om man kan optimere c ved at gøre det fra array til en integer
+      
       for (int c = 0; c < BMP_CHANNELS; c++){
         output_image[x][y][c] = temp_image2[x][y];
       }
