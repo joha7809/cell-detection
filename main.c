@@ -101,21 +101,21 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
         }
       } else {
         output_image[x][y] = 0;
-      } 
+      }
     }
   }
 
-  if (output_image != input_image) change = 1;
+  if (output_image != input_image)
+    change = 1;
   return change;
-
 }
-
 
 // VIRKER IKKE
 int erode2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
 
   unsigned char tempOutput[BMP_WIDTH][BMP_HEIGTH];
-  memcpy(tempOutput, input_image, BMP_WIDTH * BMP_HEIGTH * sizeof(unsigned char));
+  memcpy(tempOutput, input_image,
+         BMP_WIDTH * BMP_HEIGTH * sizeof(unsigned char));
 
   int change = 0;
 
@@ -164,10 +164,10 @@ int erode2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
     }
   }
 
-  memcpy(input_image, tempOutput, BMP_WIDTH * BMP_HEIGTH * sizeof(unsigned char));
+  memcpy(input_image, tempOutput,
+         BMP_WIDTH * BMP_HEIGTH * sizeof(unsigned char));
   return change;
 }
-
 
 int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
 
@@ -250,48 +250,13 @@ int main(int argc, char **argv) {
 
   threshold(temp_image, temp_image);
 
-  // while (temp) {
-  //
-  //   cells += cellCounter(temp_image);
-  //   erode(temp_image, temp_image2);
-  //
-  //   for (int x = 0; x < BMP_WIDTH; x++) {
-  //     for (int y = 0; y < BMP_HEIGTH; y++) {
-  //       temp_image[x][y] = temp_image2[x][y];
-  //     }
-  //   }
-  //
-  //   temp--;
-  //
-  //   for (int x = 0; x < BMP_WIDTH; x++) {
-  //     for (int y = 0; y < BMP_HEIGTH; y++) {
-  //
-  //       for (int c = 0; c < BMP_CHANNELS; c++) {
-  //         output_image[x][y][c] = temp_image2[x][y];
-  //       }
-  //     }
-  //   }
-  //
-  //   char filename[64]; // stack buffer
-  //   snprintf(filename, sizeof(filename), "erode%d.bmp", 22 - temp); // no /
-  //   write_bitmap(output_image, filename);
-  // }
-  //
-  // for (int x = 0; x < BMP_WIDTH; x++) {
-  //   for (int y = 0; y < BMP_HEIGTH; y++) {
-  //
-  //     for (int c = 0; c < BMP_CHANNELS; c++) {
-  //       output_image[x][y][c] = temp_image2[x][y];
-  //     }
-  //   }
-  // }
-
   unsigned char (*input)[BMP_HEIGTH] = temp_image;
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
 
   int change = 1;
   int temp = 20;
   int tempCounter = temp;
+  int cells = 0;
   while (change) {
     if (temp == 0) {
       break;
@@ -299,15 +264,15 @@ int main(int argc, char **argv) {
     temp--;
     // change = erode(input, output);
 
+    erode(input, output);
 
-    erode(input,output);
+    cells += cellCounter(output);
 
     unsigned char (*tmp)[BMP_HEIGTH] = input;
     input = output;
     output = tmp;
 
-
-    //erode2(input);
+    // erode2(input);
 
     for (int x = 0; x < BMP_WIDTH; x++) {
       for (int y = 0; y < BMP_HEIGTH; y++) {
@@ -319,9 +284,12 @@ int main(int argc, char **argv) {
     }
 
     char filename[64]; // stack buffer
-    snprintf(filename, sizeof(filename), "erode%d.bmp", tempCounter - temp); // no /
+    snprintf(filename, sizeof(filename), "erode%d.bmp",
+             tempCounter - temp); // no /
     write_bitmap(output_image, filename);
   }
+
+  printf("Cells: %d\n", cells);
 
   printf("Done!\n");
   return 0;
