@@ -7,6 +7,7 @@
 #include "cbmp.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
@@ -67,45 +68,105 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
 
       if (input_image[x][y] == 255) {
 
-        int locChange = 0;
+        int isWhite = 1;
+
+        if (x != 0) {
+          if (input_image[x - 1][y] == 0) {
+            isWhite = 0;
+          }
+        }
+
+        if (x != BMP_WIDTH - 1) {
+          if (input_image[x + 1][y] == 0) {
+            isWhite = 0;
+          }
+        }
+
+        if (y != 0) {
+          if (input_image[x][y - 1] == 0) {
+            isWhite = 0;
+          }
+        }
+
+        if (y != BMP_HEIGTH - 1) {
+          if (input_image[x][y + 1] == 0) {
+            isWhite = 0;
+          }
+        }
+
+        if (isWhite) {
+          output_image[x][y] = 255;
+        } else {
+          output_image[x][y] = 0;
+        }
+      } else {
+        output_image[x][y] = 0;
+      } 
+    }
+  }
+
+  if (output_image != input_image) change = 1;
+  return change;
+
+}
+
+// VIRKER IKKE
+int erode2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
+
+  unsigned char tempOutput[BMP_WIDTH][BMP_HEIGTH];
+  memcpy(tempOutput, input_image, BMP_WIDTH * BMP_HEIGTH * sizeof(unsigned char));
+
+  int change = 0;
+
+  // Se om dette kan fikses
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+
+      if (input_image[x][y] == 255) {
+
+        int isWhite = 1;
+
         if (x != 0) {
           if (input_image[x - 1][y] == 0) {
             change = 1;
-            locChange = 1;
+            isWhite = 0;
           }
         }
 
         if (x != BMP_WIDTH - 1) {
           if (input_image[x + 1][y] == 0) {
             change = 1;
-            locChange = 1;
+            isWhite = 0;
           }
         }
 
         if (y != 0) {
           if (input_image[x][y - 1] == 0) {
             change = 1;
-            locChange = 1;
+            isWhite = 0;
           }
         }
 
         if (y != BMP_HEIGTH - 1) {
           if (input_image[x][y + 1] == 0) {
             change = 1;
-            locChange = 1;
+            isWhite = 0;
           }
         }
 
-        if (locChange) {
-          output_image[x][y] = 0;
+        if (isWhite) {
+          tempOutput[x][y] = 255;
         } else {
-          output_image[x][y] = 255;
+          tempOutput[x][y] = 0;
         }
       }
     }
   }
+
+  memcpy(input_image, tempOutput, BMP_WIDTH * BMP_HEIGTH * sizeof(unsigned char));
   return change;
 }
+
 
 int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
 
@@ -228,19 +289,22 @@ int main(int argc, char **argv) {
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
 
   int change = 1;
-  int t = 0;
   int temp = 20;
+  int tempCounter = temp;
   while (change) {
-    if (t == 20) {
+    if (temp == 0) {
       break;
     }
-    t++;
     temp--;
-    change = erode(input, output);
+    // change = erode(input, output);
 
     unsigned char (*tmp)[BMP_HEIGTH] = input;
     input = output;
     output = tmp;
+
+    erode(input,output);
+
+    //erode2(input);
 
     for (int x = 0; x < BMP_WIDTH; x++) {
       for (int y = 0; y < BMP_HEIGTH; y++) {
@@ -252,11 +316,9 @@ int main(int argc, char **argv) {
     }
 
     char filename[64]; // stack buffer
-    snprintf(filename, sizeof(filename), "erode%d.bmp", 22 - temp); // no /
+    snprintf(filename, sizeof(filename), "erode%d.bmp", tempCounter - temp); // no /
     write_bitmap(output_image, filename);
   }
-
-  write_bitmap(output_image, argv[2] + 2);
 
   printf("Done!\n");
   return 0;
