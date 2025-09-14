@@ -110,6 +110,7 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
 
 }
 
+
 // VIRKER IKKE
 int erode2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
 
@@ -298,11 +299,13 @@ int main(int argc, char **argv) {
     temp--;
     // change = erode(input, output);
 
+
+    erode(input,output);
+
     unsigned char (*tmp)[BMP_HEIGTH] = input;
     input = output;
     output = tmp;
 
-    erode(input,output);
 
     //erode2(input);
 
