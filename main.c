@@ -249,8 +249,8 @@ int main(int argc, char **argv) {
   // Run inversion
   grayscale(input_image, temp_image);
 
-  threshold(temp_image, temp_image);
-  // otsu(temp_image, temp_image);
+  // threshold(temp_image, temp_image);
+  otsu(temp_image, temp_image);
   // write to bitmap
 
   unsigned char (*input)[BMP_HEIGTH] = temp_image;
