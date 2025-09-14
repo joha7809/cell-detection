@@ -5,6 +5,7 @@
 // To run (win): main.exe example.bmp example_inv.bmp
 
 #include "cbmp.h"
+#include "otsu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -249,6 +250,8 @@ int main(int argc, char **argv) {
   grayscale(input_image, temp_image);
 
   threshold(temp_image, temp_image);
+  // otsu(temp_image, temp_image);
+  // write to bitmap
 
   unsigned char (*input)[BMP_HEIGTH] = temp_image;
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
