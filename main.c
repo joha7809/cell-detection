@@ -22,6 +22,11 @@ unsigned char temp_image2[BMP_WIDTH][BMP_HEIGTH];
 // Main function
 int main(int argc, char **argv) {
 
+
+
+  //Testing cellcount.
+
+
   // argc counts how may arguments are passed
   // argv[0] is a string with the name of the program
   // argv[1] is the first command line argument (input image)
@@ -38,7 +43,7 @@ int main(int argc, char **argv) {
 
   // Load image from file
   read_bitmap(argv[1], input_image);
-
+  write_bitmap(input_image, "output/input_image.bmp");
   // Run inversion
   grayscale(input_image, temp_image);
 
@@ -51,18 +56,18 @@ int main(int argc, char **argv) {
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
 
   int change = 1;
-  int temp = 20;
+  int temp = 1;
   int tempCounter = temp;
   int cells = 0;
   Coordinate_Array array = init_array(50);
   while (change) {
-    if (temp == 0) {
+    if(erode(input, output) == 0){
       break;
     }
     temp--;
     // change = erode(input, output);
 
-    erode(input, output);
+    
 
     cells += cellCounter(output, &array);
 
@@ -70,7 +75,6 @@ int main(int argc, char **argv) {
     input = output;
     output = tmp;
 
-    // erode2(input);
 
     for (int x = 0; x < BMP_WIDTH; x++) {
       for (int y = 0; y < BMP_HEIGTH; y++) {
@@ -86,6 +90,7 @@ int main(int argc, char **argv) {
              tempCounter - temp); // no /
     write_bitmap(output_image, filename);
   }
+
   printf("Cells: %d\n", cells);
 
   int found;
@@ -99,7 +104,7 @@ int main(int argc, char **argv) {
     triforce(input_image, x, y);
     // printf("Point: (%d, %d) \n", x, y);
   }
-  write_bitmap(input_image, "pretty.bmp");
+  write_bitmap(input_image, "output/output_image.bmp");
   printf("Done!\n");
   return 0;
 }
