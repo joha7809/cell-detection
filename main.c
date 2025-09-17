@@ -5,8 +5,8 @@
 // To run (win): main.exe example.bmp example_inv.bmp
 
 #include "cbmp.h"
-#include "otsu.h"
 #include "count.h"
+#include "otsu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
     }
 
     char filename[64]; // stack buffer
-    snprintf(filename, sizeof(filename), "erode%d.bmp",
+    snprintf(filename, sizeof(filename), "output/erode%d.bmp",
              tempCounter - temp); // no /
     write_bitmap(output_image, filename);
   }
