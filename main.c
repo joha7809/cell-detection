@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
   grayscale(input_image, temp_image);
 
   // threshold(temp_image, temp_image);
+  // threshold(temp_image, temp_image);
   otsu(temp_image, temp_image);
   // write to bitmap
 
@@ -96,7 +97,7 @@ int main(int argc, char **argv) {
     int y = array.data[i].y;
 
     triforce(input_image, x, y);
-    printf("Point: (%d, %d) \n", x, y);
+    // printf("Point: (%d, %d) \n", x, y);
   }
   write_bitmap(input_image, "pretty.bmp");
   printf("Done!\n");

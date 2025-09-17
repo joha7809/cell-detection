@@ -3,18 +3,18 @@
 
 #define total_pixels (950 * 950);
 
-// void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
-//                unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {
-//   for (int x = 0; x < BMP_WIDTH; x++) {
-//     for (int y = 0; y < BMP_HEIGTH; y++) {
-//       if (input_image[x][y] <= 90) {
-//         output_image[x][y] = 0;
-//       } else {
-//         output_image[x][y] = 255;
-//       }
-//     }
-//   }
-// }
+void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
+               unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+      if (input_image[x][y] <= 90) {
+        output_image[x][y] = 0;
+      } else {
+        output_image[x][y] = 255;
+      }
+    }
+  }
+}
 
 void grayscale(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
                unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {

@@ -28,9 +28,9 @@ void drawTriangle(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]
         continue;
       }
 
-      input_image[currX][currY][0] = 255;
-      input_image[currX][currY][1] = 255;
-      input_image[currX][currY][2] = 0;
+      input_image[currX][currY][0] = currX % 255;
+      input_image[currX][currY][1] = currY % 255;
+      input_image[currX][currY][2] = (currX+currY) % 255;
     }
     
     currX = x;

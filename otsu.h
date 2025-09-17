@@ -6,6 +6,9 @@
 void otsu(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
           unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]);
 
+void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
+          unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]);
+
 void grayscale(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
                unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]);
 

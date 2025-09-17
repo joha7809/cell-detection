@@ -93,6 +93,14 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
           }
         }
 
+        if (x == 0 || x == BMP_WIDTH-1) {
+            isWhite = 0;
+        }
+
+        if (y == 0 || y == BMP_HEIGTH-1) {
+            isWhite = 0;
+        }
+
         if (y != 0) {
           if (input_image[x][y - 1] == 0) {
             isWhite = 0;
