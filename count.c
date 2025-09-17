@@ -73,7 +73,6 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
 
   int change = 0;
 
-  // Se om dette kan fikses
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
 
@@ -81,34 +80,15 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
 
         int isWhite = 1;
 
-        if (x != 0) {
-          if (input_image[x - 1][y] == 0) {
-            isWhite = 0;
-          }
-        }
-
-        if (x != BMP_WIDTH - 1) {
-          if (input_image[x + 1][y] == 0) {
-            isWhite = 0;
-          }
-        }
-
         if (x == 0 || x == BMP_WIDTH-1) {
             isWhite = 0;
-        }
-
-        if (y == 0 || y == BMP_HEIGTH-1) {
+        } else if (y == 0 || y == BMP_HEIGTH-1) {
             isWhite = 0;
-        }
-
-        if (y != 0) {
-          if (input_image[x][y - 1] == 0) {
-            isWhite = 0;
-          }
-        }
-
-        if (y != BMP_HEIGTH - 1) {
-          if (input_image[x][y + 1] == 0) {
+        } else {
+          if ((input_image[x - 1][y] == 0) ||
+              (input_image[x + 1][y] == 0) ||
+              (input_image[x][y - 1] == 0) ||
+              (input_image[x][y + 1] == 0)) {
             isWhite = 0;
           }
         }
@@ -116,6 +96,7 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
         if (isWhite) {
           output_image[x][y] = 255;
         } else {
+          change = 1;
           output_image[x][y] = 0;
         }
       } else {
@@ -123,8 +104,5 @@ int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
       }
     }
   }
-
-  if (output_image != input_image)
-    change = 1;
   return change;
 }
