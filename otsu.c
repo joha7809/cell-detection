@@ -1,7 +1,50 @@
 #include "otsu.h"
 #include "cbmp.h"
 
-unsigned int total_pixels = 950 * 950;
+#define total_pixels (950 * 950);
+
+// void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
+//                unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {
+//   for (int x = 0; x < BMP_WIDTH; x++) {
+//     for (int y = 0; y < BMP_HEIGTH; y++) {
+//       if (input_image[x][y] <= 90) {
+//         output_image[x][y] = 0;
+//       } else {
+//         output_image[x][y] = 255;
+//       }
+//     }
+//   }
+// }
+
+void grayscale(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
+               unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+      int gray =
+          (input_image[x][y][0] + input_image[x][y][1] + input_image[x][y][2]) /
+          3;
+
+      output_image[x][y] = gray;
+    }
+  }
+}
+
+// void grayscale2(
+//     unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
+//     unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]) {
+//   for (int x = 0; x < BMP_WIDTH; x++) {
+//     for (int y = 0; y < BMP_HEIGTH; y++) {
+
+//       int gray = (input_image[x][y][0] * 0.299 + input_image[x][y][1] * 0.587 +
+//                   input_image[x][y][2] * 0.114);
+
+//       for (int c = 0; c < BMP_CHANNELS; c++) {
+//         output_image[x][y][c] = gray;
+//       }
+//     }
+//   }
+// }
+
 
 void otsu(
     unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
@@ -36,7 +79,7 @@ void otsu(
   float mean_background = 0;
   // Floats since division
   float mean_foreground = 0;
-  double variance = 0;
+  float variance = 0;
   float max_variance = 0;
 
   // Calculating all the possible thresholds (Need the means & stuff for the
@@ -44,7 +87,7 @@ void otsu(
   for (int l = 0; l < 255; l++) {
     current_sum += l * histogram[l];
     background += histogram[l];
-    foreground = total_pixels - background;
+    foreground = (950*950) - background;
 
     if (background != 0 &&
         foreground !=
