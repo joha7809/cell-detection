@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
   benchmark("greyscale") { grayscale(input_image, temp_image); }
 
   // threshold(temp_image, temp_image);
-  benchmark("Threshold") { threshold(temp_image, temp_image); }
+  benchmark("Otsu") { otsu(temp_image, temp_image); }
   // otsu(temp_image, temp_image);
   // write to bitmap
 
@@ -69,12 +69,12 @@ int main(int argc, char **argv) {
 
   // benchmark("init of \"array\"") { Coordinate_Array array = init_array(50); }
   Coordinate_Array array = init_array(50);
-  
+
   while (change) {
 
     // change = erode(input, output);
 
-    benchmark("erode") {change = erode(input, output); }
+    benchmark("erode") { change = erode(input, output); }
 
     benchmark("cell_counter") { cells += cellCounter(output, &array); }
 
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
 
     triforce(input_image, x, y);
   }
-  
+
   // output the original image with triforces
   write_bitmap(input_image, "pretty.bmp");
   printf("Done!\n");
