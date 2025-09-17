@@ -51,12 +51,9 @@ int main(int argc, char **argv) {
   int change = 1;
   int cells = 0;
   Coordinate_Array array = init_array(50);
-  int erodeNum = 0;
+  
   while (change) {
     change = erode(input, output);
-    erodeNum++;
-    
-    printf("Eroded %d times\n", erodeNum);
     
     cells += cellCounter(output, &array);
 
