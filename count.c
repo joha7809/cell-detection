@@ -1,7 +1,8 @@
 #include "count.h"
 #include "cbmp.h"
+#include "pixelarray.h"
 
-int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
+int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH], Coordinate_Array* array) {
 
   int cells = 0;
 
@@ -43,8 +44,15 @@ int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH]) {
 
         // Create Struct to hold these values:
         if (!connected) {
-          cells++;
-          
+            Coordinate coordinate = {coordinate.x = x, coordinate.y = y};
+            append(coordinate, array);
+    
+            cells++;
+
+          // HER SÆTTER DU IND I ARRAY
+
+
+        
           // array of cell locations append.input_image[x][y]
           for (int i = -l; i <= r; i++) {
             for (int j = -u; j <= d; j++) {

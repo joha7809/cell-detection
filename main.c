@@ -1,4 +1,4 @@
-// To compile (linux/mac): gcc cbmp.c main.c otsu.c count.c -o main.out -std=c99
+// To compile (linux/mac): gcc cbmp.c main.c otsu.c count.c -o main.out -std=c99gcc -o test_coordinates coordinates.c test_coordinates.c
 // To run (linux/mac): ./main.out example.bmp example_inv.bmp
 
 // To compile (win): gcc cbmp.c main.c -o main.exe -std=c99
@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "pixelarray.h"
+#include "triangle.h"
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
@@ -19,6 +21,7 @@ unsigned char temp_image2[BMP_WIDTH][BMP_HEIGTH];
 
 // Main function
 int main(int argc, char **argv) {
+
   // argc counts how may arguments are passed
   // argv[0] is a string with the name of the program
   // argv[1] is the first command line argument (input image)
@@ -50,6 +53,7 @@ int main(int argc, char **argv) {
   int temp = 20;
   int tempCounter = temp;
   int cells = 0;
+  Coordinate_Array array = init_array(50);
   while (change) {
     if (temp == 0) {
       break;
@@ -59,7 +63,7 @@ int main(int argc, char **argv) {
 
     erode(input, output);
 
-    cells += cellCounter(output);
+    cells += cellCounter(output, &array);
 
     unsigned char (*tmp)[BMP_HEIGTH] = input;
     input = output;
@@ -81,9 +85,20 @@ int main(int argc, char **argv) {
              tempCounter - temp); // no /
     write_bitmap(output_image, filename);
   }
-
   printf("Cells: %d\n", cells);
 
+  int found;
+  found = array.index;
+  printf("Cells in array: %d\n", found);
+
+  for (int i=0; i<found; i++) {
+    int x = array.data[i].x;
+    int y = array.data[i].y;
+
+    triforce(input_image, x, y);
+    printf("Point: (%d, %d) \n", x, y);
+  }
+  write_bitmap(input_image, "pretty.bmp");
   printf("Done!\n");
   return 0;
 }
