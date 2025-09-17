@@ -71,13 +71,10 @@ int main(int argc, char **argv) {
   Coordinate_Array array = init_array(50);
   
   while (change) {
-    if (temp == 0) {
-      break;
-    }
-    temp--;
+
     // change = erode(input, output);
 
-    benchmark("erode") { erode(input, output); }
+    benchmark("erode") {change = erode(input, output); }
 
     benchmark("cell_counter") { cells += cellCounter(output, &array); }
 
