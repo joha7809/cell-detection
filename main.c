@@ -30,7 +30,6 @@
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
-unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
 unsigned char temp_image[BMP_WIDTH][BMP_HEIGTH];
 unsigned char temp_image2[BMP_WIDTH][BMP_HEIGTH];
 
@@ -49,7 +48,7 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  printf("Example program - 02132 - A1\n");
+  printf("Program Running...\n");
 
   // Load image from file
   read_bitmap(argv[1], input_image);
@@ -66,12 +65,11 @@ int main(int argc, char **argv) {
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
 
   int change = 1;
-  int temp = 20;
-  int tempCounter = temp;
   int cells = 0;
 
   // benchmark("init of \"array\"") { Coordinate_Array array = init_array(50); }
   Coordinate_Array array = init_array(50);
+  
   while (change) {
     if (temp == 0) {
       break;
@@ -86,36 +84,19 @@ int main(int argc, char **argv) {
     unsigned char (*tmp)[BMP_HEIGTH] = input;
     input = output;
     output = tmp;
-
-    // erode2(input);
-
-    for (int x = 0; x < BMP_WIDTH; x++) {
-      for (int y = 0; y < BMP_HEIGTH; y++) {
-
-        for (int c = 0; c < BMP_CHANNELS; c++) {
-          output_image[x][y][c] = output[x][y];
-        }
-      }
-    }
-
-    char filename[64]; // stack buffer
-    snprintf(filename, sizeof(filename), "output/erode%d.bmp",
-             tempCounter - temp); // no /
-    write_bitmap(output_image, filename);
   }
+
   printf("Cells: %d\n", cells);
 
-  int found;
-  found = array.index;
-  printf("Cells in array: %d\n", found);
-
-  for (int i = 0; i < found; i++) {
+  // Mark every cell in the original image with a triforce
+  for (int i = 0; i < cells; i++) {
     int x = array.data[i].x;
     int y = array.data[i].y;
 
     triforce(input_image, x, y);
-    // printf("Point: (%d, %d) \n", x, y);
   }
+  
+  // output the original image with triforces
   write_bitmap(input_image, "pretty.bmp");
   printf("Done!\n");
   return 0;
