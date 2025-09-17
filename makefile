@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -Wall
+CFLAGS = -std=c99 -Wall -DBENCHMARK
 TARGET = main.out
 
 SRCS := $(filter-out ./samples/% ./results_example/%, $(wildcard *.c))

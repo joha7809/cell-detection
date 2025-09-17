@@ -13,6 +13,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
+// source:
+// https://stackoverflow.com/questions/39729876/is-it-a-way-to-create-a-clever-macro-to-automatically-benchmark-something-in-c
+// Enabled with -DBENCHMARK
+#ifdef BENCHMARK
+#define benchmark(x)                                                           \
+  for (double startTime = (double)clock() / CLOCKS_PER_SEC, run = 1.0;         \
+       run == 1.0;                                                             \
+       run = 0, printf("\n%s\nTime elapsed: %f s\n", x,                        \
+                       (double)clock() / CLOCKS_PER_SEC - startTime))
+#else
+#define benchmark(x) if (1)
+#endif
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
@@ -41,10 +55,10 @@ int main(int argc, char **argv) {
   read_bitmap(argv[1], input_image);
 
   // Run inversion
-  grayscale(input_image, temp_image);
+  benchmark("greyscale") { grayscale(input_image, temp_image); }
 
   // threshold(temp_image, temp_image);
-  threshold(temp_image, temp_image);
+  benchmark("Threshold") { threshold(temp_image, temp_image); }
   // otsu(temp_image, temp_image);
   // write to bitmap
 
@@ -55,6 +69,8 @@ int main(int argc, char **argv) {
   int temp = 20;
   int tempCounter = temp;
   int cells = 0;
+
+  // benchmark("init of \"array\"") { Coordinate_Array array = init_array(50); }
   Coordinate_Array array = init_array(50);
   while (change) {
     if (temp == 0) {
@@ -63,9 +79,9 @@ int main(int argc, char **argv) {
     temp--;
     // change = erode(input, output);
 
-    erode(input, output);
+    benchmark("erode") { erode(input, output); }
 
-    cells += cellCounter(output, &array);
+    benchmark("cell_counter") { cells += cellCounter(output, &array); }
 
     unsigned char (*tmp)[BMP_HEIGTH] = input;
     input = output;
