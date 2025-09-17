@@ -16,7 +16,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: all
-	./$(TARGET) samples/easy/6EASY.bmp example_inv.bmp
+	./$(TARGET) example.bmp example_inv.bmp
 
 clean:
 	rm -f $(OBJS) $(TARGET)
