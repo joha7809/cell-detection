@@ -18,6 +18,9 @@
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
 unsigned char temp_image[BMP_WIDTH][BMP_HEIGTH];
 unsigned char temp_image2[BMP_WIDTH][BMP_HEIGTH];
+unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
+
+  // enough space
 
 // Main function
 int main(int argc, char **argv) {
@@ -45,15 +48,42 @@ int main(int argc, char **argv) {
   // otsu(temp_image, temp_image);
   // write to bitmap
 
+
   unsigned char (*input)[BMP_HEIGTH] = temp_image;
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
 
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+      for (int c = 0; c < BMP_CHANNELS; c++) {
+        output_image[x][y][c] = temp_image[x][y];
+        }
+      }
+    }
+
+  write_bitmap(output_image, "output/step_0_.bmp"); ///THE FAULT LIES WITH YOU ISHMAELLLL
+
+
   int change = 1;
   int cells = 0;
+  int erode_Count = 0;
   Coordinate_Array array = init_array(50);
   
   while (change) {
+    erode_Count ++;
+
     change = erode(input, output);
+
+        for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+
+    for (int c = 0; c < BMP_CHANNELS; c++) {
+      output_image[x][y][c] = output[x][y];
+      }
+      }
+    }
+        char filename[256];
+    sprintf(filename, "output/step_%d_.bmp", erode_Count);
+    write_bitmap(output_image, filename);
     
     cells += cellCounter(output, &array);
 
@@ -73,7 +103,7 @@ int main(int argc, char **argv) {
   }
   
   // output the original image with triforces
-  write_bitmap(input_image, "pretty.bmp");
+  write_bitmap(input_image, "output/output_image.bmp");
   printf("Done!\n");
   return 0;
 }
