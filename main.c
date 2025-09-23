@@ -7,6 +7,7 @@
 
 #include "cbmp.h"
 #include "count.h"
+#include "gaussian_blur.h"
 #include "otsu.h"
 #include "pixelarray.h"
 #include "triangle.h"
@@ -18,6 +19,7 @@
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
 unsigned char temp_image[BMP_WIDTH][BMP_HEIGTH];
 unsigned char temp_image2[BMP_WIDTH][BMP_HEIGTH];
+unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
 
 // Main function
 int main(int argc, char **argv) {
@@ -39,11 +41,23 @@ int main(int argc, char **argv) {
   // Load image from file
   read_bitmap(argv[1], input_image);
 
+  // grayscale(input_image, temp_image);
   grayscale(input_image, temp_image);
 
-  threshold(temp_image, temp_image);
-  // otsu(temp_image, temp_image);
-  // write to bitmap
+  gaussian_blur(temp_image, temp_image2);
+
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+
+      for (int c = 0; c < BMP_CHANNELS; c++) {
+        output_image[x][y][c] = temp_image2[x][y];
+      }
+    }
+  }
+  write_bitmap(output_image, "blurred.bmp");
+  // threshold(temp_image, temp_image);
+  otsu(temp_image2, temp_image);
+  // fill_holes(temp_image);
 
   unsigned char (*input)[BMP_HEIGTH] = temp_image;
   unsigned char (*output)[BMP_HEIGTH] = temp_image2;
@@ -51,10 +65,23 @@ int main(int argc, char **argv) {
   int change = 1;
   int cells = 0;
   Coordinate_Array array = init_array(50);
-  
+
+  int erode_count = 0;
   while (change) {
     change = erode(input, output);
-    
+    for (int x = 0; x < BMP_WIDTH; x++) {
+      for (int y = 0; y < BMP_HEIGTH; y++) {
+
+        for (int c = 0; c < BMP_CHANNELS; c++) {
+          output_image[x][y][c] = output[x][y];
+        }
+      }
+    }
+    char filename[256];
+    sprintf(filename, "output/step_%d_.bmp", erode_count);
+    write_bitmap(output_image, filename);
+    erode_count++;
+
     cells += cellCounter(output, &array);
 
     unsigned char (*tmp)[BMP_HEIGTH] = input;
@@ -71,7 +98,7 @@ int main(int argc, char **argv) {
 
     triforce(input_image, x, y);
   }
-  
+
   // output the original image with triforces
   write_bitmap(input_image, "pretty.bmp");
   printf("Done!\n");

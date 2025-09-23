@@ -1,7 +1,7 @@
 #include "otsu.h"
 #include "cbmp.h"
 
-#define total_pixels (950 * 950);
+#define total_pixels (BMP_WIDTH * BMP_HEIGTH);
 
 void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
                unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {
@@ -29,31 +29,32 @@ void grayscale(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
   }
 }
 
-// void grayscale2(
-//     unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
-//     unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]) {
-//   for (int x = 0; x < BMP_WIDTH; x++) {
-//     for (int y = 0; y < BMP_HEIGTH; y++) {
+void grayscale2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
+                unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {
+  for (int x = 0; x < BMP_WIDTH; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
 
-//       int gray = (input_image[x][y][0] * 0.299 + input_image[x][y][1] * 0.587 +
-//                   input_image[x][y][2] * 0.114);
+      int gray = (input_image[x][y][0] * 0.299 + input_image[x][y][1] * 0.587 +
+                  input_image[x][y][2] * 0.114);
 
-//       for (int c = 0; c < BMP_CHANNELS; c++) {
-//         output_image[x][y][c] = gray;
-//       }
-//     }
-//   }
-// }
-
+      output_image[x][y] = gray;
+    }
+  }
+}
 
 void otsu(
     unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
     unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) { // THRESHOLD VERSION
                                                          // #2: OTSU METHOD
 
-  unsigned int histogram[256] = {
-      0}; // Making a histogram over the frequency of every intensity (assuming
-          // it's been grayscaled already so there's only 1)
+  unsigned int histogram[256];
+
+  for (int i = 0; i < 256; i++) {
+    histogram[i] = 0;
+  }
+
+  // Making a histogram over the frequency of every intensity (assuming
+  // it's been grayscaled already so there's only 1)
   // Spent 3 hours debugging, turned out it being an unsigned char was making it
   // overflow )))))))) IDI NAHUI
 
@@ -76,25 +77,25 @@ void otsu(
   unsigned int threshold = 0;
   int foreground = 0; // Made it a signed int since it might go kerfuffle if
                       // unsigned due to the subtraction?
-  float mean_background = 0;
+  double mean_background = 0;
   // Floats since division
-  float mean_foreground = 0;
-  float variance = 0;
-  float max_variance = 0;
+  double mean_foreground = 0;
+  double variance = 0;
+  double max_variance = 0;
 
   // Calculating all the possible thresholds (Need the means & stuff for the
   // threshold)
-  for (int l = 0; l < 255; l++) {
+  for (int l = 0; l < 256; l++) {
     current_sum += l * histogram[l];
     background += histogram[l];
-    foreground = (950*950) - background;
+    foreground = (950 * 950) - background;
 
     if (background != 0 &&
         foreground !=
             0) { // Will be dividing with them, so if they're 0 it's a big no no
 
-      mean_background = (float)current_sum / background;
-      mean_foreground = (float)(cumul_sum - current_sum) / foreground;
+      mean_background = (double)current_sum / (double)background;
+      mean_foreground = (double)(cumul_sum - current_sum) / (double)foreground;
       variance = (double)background * (double)foreground *
                  ((mean_background - mean_foreground) *
                   (mean_background - mean_foreground));
@@ -111,7 +112,8 @@ void otsu(
 
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
-      if (input_image[x][y] <= threshold) {
+      if (input_image[x][y] < threshold) {
+        // TODO: PLay with threshold, maybe it should be < or >= ?
         output_image[x][y] = 0;
       } else {
         output_image[x][y] = 255;
