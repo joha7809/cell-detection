@@ -22,22 +22,18 @@ u_int8_t temp_image[(BMP_WIDTH*BMP_HEIGTH+7)/8] = {0};
 u_int8_t temp_image2[(BMP_WIDTH*BMP_HEIGTH+7)/8] = {0};
 unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
 
-void convert_to_image(u_int8_t* grid, unsigned char out[BMP_WIDTH][BMP_HEIGTH]) {
+void convert_to_image(u_int8_t* grid,
+                      unsigned char out[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
         for (int x = 0; x < BMP_WIDTH; x++) {
-            int byteIndex = (y * BMP_WIDTH + x) / 8;          // Which byte contains the pixel
-            int bitIndex = x % 8;                             // Which bit within that byte corresponds to the pixel
-
-            // Extract the bit and reverse the bit order within the byte
-            int bit = (grid[byteIndex] & (1 << (7 - bitIndex))) >> (7 - bitIndex);
-            int color;
-            if (bit) {
-              color = 255;
-            } else {
-              color = 0;
-            }
-            // Map the result into the temp_image2 array
-            out[x][y] = color;
+            int linear = y * BMP_WIDTH + x;
+            int byteIndex = linear >> 3;          // /8
+            int bitIndex  = linear & 7;           // %8  (LSB-first)
+            int bit = (grid[byteIndex] >> bitIndex) & 1;
+            unsigned char v = bit ? 255 : 0;
+            out[x][y][0] = v;
+            out[x][y][1] = v;
+            out[x][y][2] = v;
         }
     }
 }
