@@ -6,13 +6,14 @@
 int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH], Coordinate_Array* array) {
 
   int cells = 0;
+  int size = 10;
 
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
 
       if (input_image[x][y] == 255) {
         
-        int size = 6;
+        
 
         int connected = isConnectedCircle(input_image, x, y, size);
 
