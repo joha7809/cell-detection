@@ -4,10 +4,10 @@
 #include "cbmp.h"
 #include "otsu.h"
 #include "pixelarray.h"
+#include "stdio.h"
 
-int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH], Coordinate_Array* array);
+int cellCounter(u_int8_t* in, Coordinate_Array* array);
 
-int erode(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
-          unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]);
+int erode(u_int8_t* in,u_int8_t* out);
 
 #endif

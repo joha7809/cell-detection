@@ -8,6 +8,20 @@ typedef struct
     int y;
 } Coordinate;
 
+void set_one(u_int8_t* grid, int x, int y){
+    grid[(y*950+x)/8] |= (1<<(x%8));
+};
+
+void set_zero(u_int8_t* grid, int x, int y){
+    grid[(y*950+x)/8] &= ~(1 << (x%8));
+};
+
+int get(u_int8_t* grid, int x, int y){
+    return (grid[(y*950+x)/8] & (1 << (x%8))) >> (x%8);
+};
+
+
+
 
 typedef struct {
     int index;
@@ -34,7 +48,7 @@ void append(Coordinate point, Coordinate_Array* array) {
         array->capacity *= 2;
         array->data = realloc(array->data, array->capacity * sizeof(Coordinate));
         if(array->data == NULL){
-            //TODO: KILL THE CHILD
+            //TODO: DESTROY THE CHILD; CORRUPT THEM ALL
         };
     }
     
@@ -43,4 +57,15 @@ void append(Coordinate point, Coordinate_Array* array) {
 };
 
 
-//Linkedlist måske
+
+// int main() {
+//     u_int8_t grid[(950*950+7)/8] = {0};
+
+//     set_one(grid, 38, 40);
+//     printf("%d \n", get(grid, 38, 40));
+//     set_one(grid, 0, 0);
+//     printf("%d \n", get(grid, 0, 0));
+//     set_zero(grid, 0,0);
+//     printf("%d \n", get(grid, 0, 0));
+// }
+

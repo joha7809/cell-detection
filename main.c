@@ -17,9 +17,30 @@
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
-unsigned char temp_image[BMP_WIDTH][BMP_HEIGTH];
-unsigned char temp_image2[BMP_WIDTH][BMP_HEIGTH];
+unsigned char procs_image[BMP_WIDTH][BMP_HEIGTH];
+u_int8_t temp_image[(BMP_WIDTH*BMP_HEIGTH+7)/8] = {0};
+u_int8_t temp_image2[(BMP_WIDTH*BMP_HEIGTH+7)/8] = {0};
 unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
+
+void convert_to_image(u_int8_t* grid, unsigned char out[BMP_WIDTH][BMP_HEIGTH]) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+        for (int x = 0; x < BMP_WIDTH; x++) {
+            int byteIndex = (y * BMP_WIDTH + x) / 8;          // Which byte contains the pixel
+            int bitIndex = x % 8;                             // Which bit within that byte corresponds to the pixel
+
+            // Extract the bit and reverse the bit order within the byte
+            int bit = (grid[byteIndex] & (1 << (7 - bitIndex))) >> (7 - bitIndex);
+            int color;
+            if (bit) {
+              color = 255;
+            } else {
+              color = 0;
+            }
+            // Map the result into the temp_image2 array
+            out[x][y] = color;
+        }
+    }
+}
 
 // Main function
 int main(int argc, char **argv) {
@@ -42,25 +63,17 @@ int main(int argc, char **argv) {
   read_bitmap(argv[1], input_image);
 
   // grayscale(input_image, temp_image);
-  grayscale(input_image, temp_image);
+  grayscale(input_image, procs_image);
 
-  gaussian_blur(temp_image, temp_image2);
+  // gaussian_blur(temp_image, temp_image2);
 
-  for (int x = 0; x < BMP_WIDTH; x++) {
-    for (int y = 0; y < BMP_HEIGTH; y++) {
-
-      for (int c = 0; c < BMP_CHANNELS; c++) {
-        output_image[x][y][c] = temp_image2[x][y];
-      }
-    }
-  }
-  write_bitmap(output_image, "blurred.bmp");
+  // write_bitmap(output_image, "blurred.bmp");
   // threshold(temp_image, temp_image);
-  otsu(temp_image2, temp_image);
+  otsu(procs_image, temp_image);
   // fill_holes(temp_image);
 
-  unsigned char (*input)[BMP_HEIGTH] = temp_image;
-  unsigned char (*output)[BMP_HEIGTH] = temp_image2;
+  u_int8_t (*input) = temp_image;
+  u_int8_t (*output) = temp_image2;
 
   int change = 1;
   int cells = 0;
@@ -69,14 +82,7 @@ int main(int argc, char **argv) {
   int erode_count = 0;
   while (change) {
     change = erode(input, output);
-    for (int x = 0; x < BMP_WIDTH; x++) {
-      for (int y = 0; y < BMP_HEIGTH; y++) {
-
-        for (int c = 0; c < BMP_CHANNELS; c++) {
-          output_image[x][y][c] = output[x][y];
-        }
-      }
-    }
+    convert_to_image(output, output_image); 
     char filename[256];
     sprintf(filename, "output/step_%d_.bmp", erode_count);
     write_bitmap(output_image, filename);

@@ -16,4 +16,8 @@ typedef struct {
 Coordinate_Array init_array(int size);
 void append(Coordinate point, Coordinate_Array* array);
 
+int get(u_int8_t* grid, int x, int y);
+void set_one(u_int8_t* grid, int x, int y);
+void set_zero(u_int8_t* grid, int x, int y);
+
 #endif // COORDINATES_H

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "otsu.h"
 #include "cbmp.h"
 
@@ -44,7 +45,7 @@ void grayscale2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
 
 void otsu(
     unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
-    unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) { // THRESHOLD VERSION
+    u_int8_t* grid) { // THRESHOLD VERSION
                                                          // #2: OTSU METHOD
 
   unsigned int histogram[256];
@@ -109,14 +110,14 @@ void otsu(
       continue;
     }
   }
-
+  threshold -= 15;
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
       if (input_image[x][y] < threshold) {
         // TODO: PLay with threshold, maybe it should be < or >= ?
-        output_image[x][y] = 0;
+        set_zero(grid,x,y);
       } else {
-        output_image[x][y] = 255;
+        set_one(grid,x,y);
       }
     }
   }
