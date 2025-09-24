@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall
+LDFLAGS = -lm
 TARGET = main.out
 
 SRCS := $(filter-out ./samples/% ./results_example/%, $(wildcard *.c))
@@ -10,7 +11,7 @@ OBJS := $(SRCS:.c=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

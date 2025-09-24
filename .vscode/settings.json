@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "cbmp.h": "c",
+        "triangle.h": "c"
+    }
+}
