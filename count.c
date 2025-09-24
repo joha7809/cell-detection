@@ -12,7 +12,7 @@ int cellCounter(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH], Coordinate_Arr
 
       if (input_image[x][y] == 255) {
         
-        int size = 9;
+        int size = 6;
 
         int connected = isConnectedCircle(input_image, x, y, size);
 
@@ -83,7 +83,7 @@ int isConnectedCircle(unsigned char image[BMP_WIDTH][BMP_HEIGTH], int cx, int cy
             int py = pts[i][1];
             if (px >= 0 && px < BMP_WIDTH && py >= 0 && py < BMP_HEIGTH) {
                 if (0 < image[px][py]){
-                  connected = 1;
+                  connected += 1;
                 }
             }
         }
