@@ -7,13 +7,14 @@
 
 #include "cbmp.h"
 #include "count.h"
-#include "gaussian_blur.h"
+// #include "gaussian_blur.h"
 #include "otsu.h"
 #include "pixelarray.h"
 #include "triangle.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "watershed.h"
 
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
@@ -78,7 +79,11 @@ int main(int argc, char **argv) {
 
   int erode_count = 0;
   while (change) {
+    
+    watershed(input);
+    
     change = erode(input, output);
+    change = 0;
     convert_to_image(output, output_image);
     char filename[256];
     sprintf(filename, "output/step_%d_.bmp", erode_count);
