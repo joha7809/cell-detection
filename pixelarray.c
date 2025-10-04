@@ -9,15 +9,18 @@ typedef struct
 } Coordinate;
 
 void set_one(u_int8_t* grid, int x, int y){
-    grid[(y*950+x)/8] |= (1<<(x%8));
+    int byte_index = y*950+x;
+    grid[byte_index/8] |= (1<<(byte_index%8));
 };
 
 void set_zero(u_int8_t* grid, int x, int y){
-    grid[(y*950+x)/8] &= ~(1 << (x%8));
+    int byte_index = y*950+x;
+    grid[byte_index/8] &= ~(1 << (byte_index%8));
 };
 
 int get(u_int8_t* grid, int x, int y){
-    return (grid[(y*950+x)/8] & (1 << (x%8))) >> (x%8);
+    int byte_index = y*950+x;
+    return (grid[byte_index/8] & (1 << (byte_index%8))) >> (byte_index%8);
 };
 
 
