@@ -2,7 +2,7 @@
 #include "otsu.h"
 #include "cbmp.h"
 
-#define total_pixels (BMP_WIDTH * BMP_HEIGTH);
+unsigned int total_pixels = (BMP_WIDTH * BMP_HEIGTH);
 
 void threshold(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
                unsigned char output_image[BMP_WIDTH][BMP_HEIGTH]) {
@@ -48,11 +48,7 @@ void otsu(
     u_int8_t* grid) { // THRESHOLD VERSION
                                                          // #2: OTSU METHOD
 
-  unsigned int histogram[256];
-
-  for (int i = 0; i < 256; i++) {
-    histogram[i] = 0;
-  }
+  unsigned int histogram[256] = {0};
 
   // Making a histogram over the frequency of every intensity (assuming
   // it's been grayscaled already so there's only 1)
@@ -89,11 +85,9 @@ void otsu(
   for (int l = 0; l < 256; l++) {
     current_sum += l * histogram[l];
     background += histogram[l];
-    foreground = (950 * 950) - background;
+    foreground = (total_pixels) - background;
 
-    if (background != 0 &&
-        foreground !=
-            0) { // Will be dividing with them, so if they're 0 it's a big no no
+    if (background != 0 && foreground !=0) { // Will be dividing with them, so if they're 0 it's a big no no
 
       mean_background = (double)current_sum / (double)background;
       mean_foreground = (double)(cumul_sum - current_sum) / (double)foreground;
