@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
   }
 
   // output the original image with triforces
-  write_bitmap(input_image, "pretty.bmp");
+  write_bitmap(input_image, argv[2]);
   printf("Done!\n");
   return 0;
 }
