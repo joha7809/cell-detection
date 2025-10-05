@@ -6,8 +6,8 @@
 #include "pixelarray.h"
 #include "stdio.h"
 
-int cellCounter(u_int8_t* in, Coordinate_Array* array);
+int cellCounter(uint8_t *in, Coordinate_Array *array);
 
-int erode(u_int8_t* in,u_int8_t* out);
+int erode(uint8_t *in, uint8_t *out);
 
 #endif
