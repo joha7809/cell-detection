@@ -52,7 +52,7 @@ void otsu(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
   // Making a histogram over the frequency of every intensity (assuming
   // it's been grayscaled already so there's only 1)
   // Spent 3 hours debugging, turned out it being an unsigned char was making it
-  // overflow )))))))) IDI NAHUI
+  // overflow
 
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
@@ -84,9 +84,11 @@ void otsu(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
   for (int l = 0; l < 256; l++) {
     current_sum += l * histogram[l];
     background += histogram[l];
-    foreground = (total_pixels) - background;
+    foreground = (total_pixels)-background;
 
-    if (background != 0 && foreground !=0) { // Will be dividing with them, so if they're 0 it's a big no no
+    if (background != 0 &&
+        foreground !=
+            0) { // Will be dividing with them, so if they're 0 it's a big no
 
       mean_background = (double)current_sum / (double)background;
       mean_foreground = (double)(cumul_sum - current_sum) / (double)foreground;

@@ -19,11 +19,11 @@
 // Declaring the array to store the image (unsigned char = unsigned 8 bit)
 unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
 unsigned char procs_image[BMP_WIDTH][BMP_HEIGTH];
-u_int8_t temp_image[(BMP_WIDTH * BMP_HEIGTH + 7) / 8] = {0};
-u_int8_t temp_image2[(BMP_WIDTH * BMP_HEIGTH + 7) / 8] = {0};
+uint8_t temp_image[(BMP_WIDTH * BMP_HEIGTH + 7) / 8] = {0};
+uint8_t temp_image2[(BMP_WIDTH * BMP_HEIGTH + 7) / 8] = {0};
 unsigned char output_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS];
 
-void convert_to_image(u_int8_t *grid,
+void convert_to_image(uint8_t *grid,
                       unsigned char out[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS]) {
   for (int y = 0; y < BMP_HEIGTH; y++) {
     for (int x = 0; x < BMP_WIDTH; x++) {
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
   int change = 1;
   int cells = 0;
   Coordinate_Array array = init_array(50);
-  u_int8_t(*tmp);
+  uint8_t(*tmp);
 
   int erode_count = 0;
   while (change) {

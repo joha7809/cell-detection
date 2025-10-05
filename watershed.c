@@ -2,8 +2,6 @@
 #include "pixelarray.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/_types/_u_int16_t.h>
-#include <sys/_types/_u_int8_t.h>
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 #define MAX_MARKERS 1000
@@ -15,7 +13,7 @@ typedef struct {
 } Marker;
 
 // Flood fill (DFS or BFS)
-void flood_fill(u_int8_t *input_img, u_int16_t visited[BMP_WIDTH][BMP_HEIGTH],
+void flood_fill(uint8_t *input_img, uint16_t visited[BMP_WIDTH][BMP_HEIGTH],
                 int x, int y, int marker) {
   if (x < 0 || x >= BMP_WIDTH || y < 0 || y >= BMP_HEIGTH)
     return;
@@ -33,9 +31,9 @@ void flood_fill(u_int8_t *input_img, u_int16_t visited[BMP_WIDTH][BMP_HEIGTH],
   flood_fill(input_img, visited, x, y - 1, marker);
 }
 
-u_int16_t *height_map(u_int8_t *input) {
+uint16_t *height_map(uint8_t *input) {
   const int MAX_INT = 65500;
-  u_int16_t *buffer = malloc(BMP_WIDTH * BMP_HEIGTH * sizeof(u_int16_t));
+  uint16_t *buffer = malloc(BMP_WIDTH * BMP_HEIGTH * sizeof(uint16_t));
 
   // Initialize
   for (int y = 0; y < BMP_HEIGTH; y++) {
@@ -88,19 +86,19 @@ u_int16_t *height_map(u_int8_t *input) {
 #define MIN_HEIGHT                                                             \
   1 /* ignore maxima with value < MIN_HEIGHT; set to 1 to keep all */
 
-int find_local_maxima_per_component(u_int16_t *height_map,
-                                    u_int16_t visited[BMP_WIDTH][BMP_HEIGTH],
+int find_local_maxima_per_component(uint16_t *height_map,
+                                    uint16_t visited[BMP_WIDTH][BMP_HEIGTH],
                                     Marker *markers, int max_markers) {
   int count = 0;
 
   // Find maximum label
-  u_int16_t max_label = 0;
+  uint16_t max_label = 0;
   for (int y = 0; y < BMP_HEIGTH; y++)
     for (int x = 0; x < BMP_WIDTH; x++)
       if (visited[x][y] > max_label)
         max_label = visited[x][y];
 
-  for (u_int16_t label = 1; label <= max_label; label++) {
+  for (uint16_t label = 1; label <= max_label; label++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
       for (int x = 0; x < BMP_WIDTH; x++) {
         if (visited[x][y] != label)
@@ -138,11 +136,11 @@ int find_local_maxima_per_component(u_int16_t *height_map,
   return count;
 }
 
-void watershed(u_int8_t *input) {
+void watershed(uint8_t *input) {
   // We directly modify the input grid
-  u_int16_t visited[BMP_WIDTH][BMP_HEIGTH] = {0};
+  uint16_t visited[BMP_WIDTH][BMP_HEIGTH] = {0};
 
-  u_int16_t marker = 1;
+  uint16_t marker = 1;
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
       if ((visited[x][y] == 0) && (get(input, x, y) == 1)) {
@@ -151,7 +149,7 @@ void watershed(u_int8_t *input) {
       }
     }
   }
-  u_int16_t *buffer = height_map(input);
+  uint16_t *buffer = height_map(input);
 
   // Find local maxima as markers
   Marker markers[MAX_MARKERS];

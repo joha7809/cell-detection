@@ -1,9 +1,8 @@
 #include "count.h"
 #include "cbmp.h"
 #include "pixelarray.h"
-#include <sys/_types/_u_int8_t.h>
 
-int isConnected(u_int8_t *input_image, int x, int y, int size) {
+int isConnected(uint8_t *input_image, int x, int y, int size) {
   // Exclusion Square
   int connected = 0;
 
@@ -29,7 +28,7 @@ int isConnected(u_int8_t *input_image, int x, int y, int size) {
   return connected;
 }
 
-int isConnectedCircle(u_int8_t *image, int cx, int cy, int radius) {
+int isConnectedCircle(uint8_t *image, int cx, int cy, int radius) {
   int connected = 0;
   int x = radius;
   int y = 0;
@@ -67,7 +66,7 @@ int isConnectedCircle(u_int8_t *image, int cx, int cy, int radius) {
   }
 }
 
-void clearSquare(u_int8_t *input_image, int x, int y, int size) {
+void clearSquare(uint8_t *input_image, int x, int y, int size) {
 
   int l = x < size ? x : size;
   int r = ((BMP_WIDTH - 1) - x) < size ? ((BMP_WIDTH - 1) - x) : size;
@@ -81,7 +80,7 @@ void clearSquare(u_int8_t *input_image, int x, int y, int size) {
   }
 }
 
-void clearCircle(u_int8_t *image, int cx, int cy, int radius) {
+void clearCircle(uint8_t *image, int cx, int cy, int radius) {
   int x = radius;
   int y = 0;
   int err = 1 - radius;
@@ -120,7 +119,7 @@ void clearCircle(u_int8_t *image, int cx, int cy, int radius) {
   }
 }
 
-int cellCounter(u_int8_t *input_image, Coordinate_Array *array) {
+int cellCounter(uint8_t *input_image, Coordinate_Array *array) {
 
   int cells = 0;
   int size = 10;
@@ -147,7 +146,7 @@ int cellCounter(u_int8_t *input_image, Coordinate_Array *array) {
   return cells;
 }
 
-int erode(u_int8_t *grid_in, u_int8_t *grid_out) {
+int erode(uint8_t *grid_in, uint8_t *grid_out) {
 
   int change = 0;
 
