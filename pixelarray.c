@@ -23,9 +23,6 @@ int get(u_int8_t* grid, int x, int y){
     return (grid[byte_index/8] & (1 << (byte_index%8))) >> (byte_index%8);
 };
 
-
-
-
 typedef struct {
     int index;
     int capacity;
