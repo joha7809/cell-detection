@@ -80,13 +80,13 @@ int main(int argc, char **argv) {
   int erode_count = 0;
   while (change) {
 
-    watershed(input);
+    // watershed(input);
 
     change = erode(input, output);
-    change = 0;
     convert_to_image(output, output_image);
     char filename[256];
-    sprintf(filename, "output/step_%d_.bmp", erode_count);
+    sprintf(filename, "output/step_%d_.bmp",
+            erode_count); // TODO: Unnecsessary buffer output_image
     write_bitmap(output_image, filename);
     erode_count++;
 
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
   printf("Cells: %d\n", cells);
 
   // Mark every cell in the original image with a triforce
-  for (int i = 0; i < cells; i++) {
+  for (int i = 0; i < array.index; i++) {
     int x = array.data[i].x;
     int y = array.data[i].y;
 

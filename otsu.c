@@ -110,7 +110,6 @@ void otsu(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
     }
   }
   threshold -= 15;
-  threshold = 100;
   for (int x = 0; x < BMP_WIDTH; x++) {
     for (int y = 0; y < BMP_HEIGTH; y++) {
       if (input_image[x][y] < threshold) {

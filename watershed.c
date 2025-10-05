@@ -98,29 +98,33 @@ int find_local_maxima_per_component(u_int16_t *height_map,
   for (int y = 0; y < BMP_HEIGTH; y++)
     for (int x = 0; x < BMP_WIDTH; x++)
       if (visited[x][y] > max_label)
-        max_label = visited[x][y]; // Scan each component
+        max_label = visited[x][y];
+
   for (u_int16_t label = 1; label <= max_label; label++) {
-    for (int y = 1; y < BMP_HEIGTH - 1; y++) {
-      for (int x = 1; x < BMP_WIDTH - 1; x++) {
+    for (int y = 0; y < BMP_HEIGTH; y++) {
+      for (int x = 0; x < BMP_WIDTH; x++) {
         if (visited[x][y] != label)
           continue;
         int val = height_map[y * BMP_WIDTH + x];
-        if (val < 2)
-          continue; // Ignore low maxima
+        if (val < MIN_HEIGHT)
+          continue;
+
         int is_max = 1;
-        for (int dy = -1; dy <= 1; dy++) {
-          for (int dx = -1; dx <= 1; dx++) {
+        for (int dy = -LOCAL_RADIUS; dy <= LOCAL_RADIUS && is_max; dy++) {
+          for (int dx = -LOCAL_RADIUS; dx <= LOCAL_RADIUS; dx++) {
             if (dx == 0 && dy == 0)
               continue;
-            if (height_map[(y + dy) * BMP_WIDTH + (x + dx)] >= val) {
+            int nx = x + dx, ny = y + dy;
+            if (nx < 0 || nx >= BMP_WIDTH || ny < 0 || ny >= BMP_HEIGTH)
+              continue;
+            if (height_map[ny * BMP_WIDTH + nx] >= val) {
               is_max = 0;
               break;
             }
           }
-          if (!is_max)
-            break;
         }
-        if (is_max && val > 0) {
+
+        if (is_max) {
           if (count >= max_markers)
             return count;
           markers[count].x = x;
@@ -133,6 +137,7 @@ int find_local_maxima_per_component(u_int16_t *height_map,
   }
   return count;
 }
+
 void watershed(u_int8_t *input) {
   // We directly modify the input grid
   u_int16_t visited[BMP_WIDTH][BMP_HEIGTH] = {0};

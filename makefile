@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -Wall
+CFLAGS = -std=c99 -Wall -O2
 TARGET = main.out
 
 SRCS := $(filter-out ./samples/% ./results_example/%, $(wildcard *.c))
@@ -16,7 +16,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: all
-	./$(TARGET) samples/medium/2MEDIUM.bmp example_inv.bmp
+	./$(TARGET) example.bmp example_inv.bmp
 
 clean:
 	rm -f $(OBJS) $(TARGET)
