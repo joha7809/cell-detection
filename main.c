@@ -69,8 +69,8 @@ int main(int argc, char **argv) {
   otsu(procs_image, temp_image);
   // fill_holes(temp_image);
 
-  u_int8_t(*input) = temp_image;
-  u_int8_t(*output) = temp_image2;
+  uint8_t(*input) = temp_image;
+  uint8_t(*output) = temp_image2;
 
   int change = 1;
   int cells = 0;

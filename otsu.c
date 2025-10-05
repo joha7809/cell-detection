@@ -44,8 +44,8 @@ void grayscale2(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH][BMP_CHANNELS],
 }
 
 void otsu(unsigned char input_image[BMP_WIDTH][BMP_HEIGTH],
-          u_int8_t *grid) { // THRESHOLD VERSION
-                            // #2: OTSU METHOD
+          uint8_t *grid) { // THRESHOLD VERSION
+                           // #2: OTSU METHOD
 
   unsigned int histogram[256] = {0};
 

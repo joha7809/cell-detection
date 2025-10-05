@@ -9,7 +9,7 @@
 typedef struct {
   int x;
   int y;
-  u_int16_t type; // marker label
+  uint16_t type; // marker label
 } Marker;
 
 // Flood fill (DFS or BFS)
